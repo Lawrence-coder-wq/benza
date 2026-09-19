@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L'indice Benza · quanto costa il carburante provincia per provincia</title>
+<meta name="description" content="Ogni mattina il prezzo medio di benzina e gasolio self in ogni provincia italiana, confrontato con la media nazionale. Dai dati ufficiali del Ministero.">
+<meta name="theme-color" content="#14171b">
+<link rel="icon" href="icone/icona-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="stile.css">
+</head>
+<body>
+<header class="testa">
+  <h1><a href="./">Benza</a></h1>
+  <p class="motto">L'indice: quanto costa il pieno, provincia per provincia.</p>
+  <p id="aggiornato">Prezzi medi del self, dai dati ufficiali del Ministero</p>
+</header>
+
+<main class="pagina-indice">
+  <p class="torna"><a href="./">← Cerca il distributore meno caro vicino a te</a></p>
+
+  <section class="blocco" aria-labelledby="t-italia">
+    <h2 id="t-italia">Oggi in Italia</h2>
+    <div class="coppia" id="italia"></div>
+    <div id="andamento"></div>
+  </section>
+
+  <section class="blocco" aria-labelledby="t-provincia">
+    <h2 id="t-provincia">La tua provincia</h2>
+    <label class="scegli">Provincia <select id="provincia"></select></label>
+    <div id="frase" class="frase"></div>
+    <button class="copia" id="copia">Copia la frase</button>
+  </section>
+
+  <section class="blocco" aria-labelledby="t-classifica">
+    <h2 id="t-classifica">Dove costa di più e dove di meno</h2>
+    <div class="scelta piccola" role="radiogroup" aria-label="Carburante" id="quale">
+      <button role="radio" aria-checked="true" data-c="benzina">Benzina</button>
+      <button role="radio" aria-checked="false" data-c="gasolio">Gasolio</button>
+    </div>
+    <div class="classifiche">
+      <div><h3>Le dieci più care</h3><ol id="care" class="classifica"></ol></div>
+      <div><h3>Le dieci meno care</h3><ol id="economiche" class="classifica"></ol></div>
+    </div>
+  </section>
+
+  <section class="blocco metodo" aria-labelledby="t-metodo">
+    <h2 id="t-metodo">Come si calcola</h2>
+    <p>Per ogni provincia si fa la media dei prezzi self comunicati dai gestori al Ministero negli ultimi dieci giorni, esclusi i carburanti speciali. Entrano nel conto solo le province con almeno cinque distributori. È una media dei distributori, non dei litri venduti: nessuno pubblica quanti litri vende ciascun impianto. Se citi questi numeri, la fonte è «Benza su dati MIMIT».</p>
+  </section>
+</main>
+
+<footer class="piede">
+  <p>Prezzi e impianti: dati aperti del <a href="https://www.mimit.gov.it/it/open-data/elenco-dataset/carburanti-prezzi-praticati-e-anagrafica-degli-impianti" target="_blank" rel="noopener">Ministero delle Imprese e del Made in Italy</a> (licenza IODL 2.0), aggiornati ogni mattina.</p>
+  <p>Un progetto libero di Lorenzo Paoletta · <a href="https://github.com/Lawrence-coder-wq/benza" target="_blank" rel="noopener">codice su GitHub</a></p>
+</footer>
+<script src="indice.js"></script>
+</body>
+</html>

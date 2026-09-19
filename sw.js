@@ -1,8 +1,8 @@
 /* Benza - Copyright (c) 2026 Lorenzo Paoletta - licenza MIT
    Fa funzionare Benza come un'app sul telefono: la pagina si apre subito anche con poca rete,
    e se la rete manca del tutto mostra gli ultimi prezzi scaricati (con la loro data). */
-const VERSIONE = "benza-1.0.0";
-const GUSCIO = ["./", "index.html", "stile.css", "app.js", "manifest.webmanifest", "icone/icona-192.png",
+const VERSIONE = "benza-1.1.0";
+const GUSCIO = ["./", "index.html", "indice.html", "stile.css", "app.js", "indice.js", "manifest.webmanifest", "icone/icona-192.png",
   "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css", "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"];
 
 self.addEventListener("install", e => e.waitUntil(caches.open(VERSIONE).then(c => c.addAll(GUSCIO)).then(() => self.skipWaiting())));

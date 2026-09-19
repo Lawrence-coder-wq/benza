@@ -65,6 +65,32 @@ def km(lat1, lon1, lat2, lon2):
     return 12742 * math.asin(math.sqrt(x))
 
 
+def indice_benza(per_provincia, medie, giorno):
+    """L'indice Benza: quanto costa in media il self in ogni provincia rispetto all'Italia, e come cambia nel tempo.
+    La media e' quella dei distributori (non pesata sui litri venduti, che nessuno pubblica). Lo storico cresce di un giorno alla volta."""
+    from province import NOMI
+    oggi = {}
+    for prov, elenco in per_provincia.items():
+        riga = {}
+        for cat in ("benzina", "gasolio"):
+            valori = sorted(e[7][cat]["s"][0] for e in elenco if cat in e[7] and "s" in e[7][cat])
+            if len(valori) >= 5:                                    # con meno di cinque distributori la media non dice niente
+                riga[cat] = round(sum(valori) / len(valori), 3)
+        if riga:
+            oggi[prov] = riga
+    percorso = os.path.join(DATI, "indice-storico.json")
+    try:
+        storico = json.load(open(percorso, encoding="utf-8"))
+    except (OSError, ValueError):
+        storico = {}
+    storico[giorno] = {"italia": {c: medie[c] for c in ("benzina", "gasolio") if c in medie}, "province": oggi}
+    for vecchio in sorted(storico)[:-400]:                          # si tiene poco piu' di un anno
+        del storico[vecchio]
+    json.dump(storico, open(percorso, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    json.dump({"giorno": giorno, "italia": storico[giorno]["italia"], "nomi": {p: NOMI.get(p, p) for p in oggi}, "province": oggi,
+               "giorni": sorted(storico)}, open(os.path.join(DATI, "indice-benza.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+
+
 def main():
     os.makedirs(os.path.join(DATI, "province"), exist_ok=True)
     estratto, lettore = righe(scarica(IMPIANTI))
@@ -141,6 +167,7 @@ def main():
             medie[cat] = round(sum(valori) / len(valori), 3)
     json.dump({"agg": estratto_prezzi, "province": indice, "medie_self": medie, "impianti": sum(len(v) for v in per_provincia.values())},
               open(os.path.join(DATI, "indice.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+    indice_benza(per_provincia, medie, estratto_prezzi)
     json.dump(comuni, open(os.path.join(DATI, "comuni.json"), "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
     peso = sum(os.path.getsize(os.path.join(r, f)) for r, _, ff in os.walk(DATI) for f in ff) / 1e6
     print("Prezzi del %s: %d impianti con prezzi validi in %d province, %d comuni, %d prezzi vecchi scartati, %.1f MB in tutto" % (
