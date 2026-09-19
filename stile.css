@@ -1,0 +1,95 @@
+/* Benza - Copyright (c) 2026 Lorenzo Paoletta - licenza MIT
+   L'idea visiva: il totem dei prezzi del distributore. Pagina chiara (si usa per strada, col sole),
+   prezzi su pannello scuro a cifre luminose a sette segmenti, col millesimo piccolo in alto come sui cartelli veri. */
+:root {
+  --asfalto: #14171b;
+  --asfalto-2: #20252b;
+  --fondo: #eef1f4;
+  --carta: #ffffff;
+  --testo: #14171b;
+  --testo-2: #56606b;
+  --linea: #d6dce3;
+  --led: #ffd21f;
+  --led-spento: #2d3238;
+  --verde: #0b8a4b;
+  --ambra: #c77700;
+  --rosso: #c4302b;
+  --raggio: 14px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--fondo); color: var(--testo); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid #1a73e8; outline-offset: 2px; border-radius: 6px; }
+
+.testa { background: var(--asfalto); color: #fff; padding: 18px max(16px, calc((100% - 1100px) / 2)) 16px; }
+.testa h1 { margin: 0; font-size: clamp(1.6rem, 5vw, 2.3rem); font-weight: 800; letter-spacing: -0.02em; line-height: 1.05; }
+.testa p { margin: 4px 0 0; color: #aab4bf; font-size: 0.9rem; }
+.testa .motto { color: var(--led); font-weight: 700; font-size: 1.05rem; margin-top: 2px; }
+
+main { padding: 0 max(16px, calc((100% - 1100px) / 2)); }
+.comandi { display: grid; gap: 12px; padding: 16px 0; }
+.riga { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.scelta { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 4px; padding: 4px; background: #dfe4ea; border-radius: 12px; }
+.scelta button { border: 0; background: transparent; padding: 11px 8px; border-radius: 9px; font-weight: 600; color: var(--testo-2); min-height: 44px; }
+.scelta button[aria-checked="true"] { background: var(--carta); color: var(--testo); box-shadow: 0 1px 2px rgb(20 23 27 / 0.18); }
+.scelta.piccola { grid-auto-columns: auto; }
+.scelta.piccola button { padding: 8px 16px; min-height: 40px; }
+.raggio { flex: 1; min-width: 200px; display: grid; gap: 2px; font-size: 0.9rem; color: var(--testo-2); }
+.raggio output { font-weight: 700; color: var(--testo); }
+.raggio input { width: 100%; accent-color: var(--asfalto); height: 28px; }
+.dove { align-items: stretch; }
+.posizione { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 12px; background: var(--asfalto); color: #fff; font-weight: 700; padding: 0 18px; min-height: 48px; }
+.posizione svg { width: 20px; height: 20px; }
+.posizione:active { transform: translateY(1px); }
+.cerca { position: relative; flex: 1; min-width: 200px; }
+.cerca input { width: 100%; min-height: 48px; border: 1px solid var(--linea); border-radius: 12px; padding: 0 14px; background: var(--carta); }
+#esiti { position: absolute; z-index: 1200; left: 0; right: 0; top: 52px; margin: 0; padding: 4px; list-style: none; background: var(--carta); border: 1px solid var(--linea); border-radius: 12px; box-shadow: 0 12px 30px rgb(20 23 27 / 0.18); max-height: 280px; overflow: auto; }
+#esiti li { padding: 10px 12px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; gap: 12px; }
+#esiti li:hover, #esiti li[aria-selected="true"] { background: var(--fondo); }
+#esiti small { color: var(--testo-2); }
+
+.risultati { display: grid; gap: 16px; padding-bottom: 28px; }
+#mappa { height: 42vh; min-height: 260px; border-radius: var(--raggio); overflow: hidden; border: 1px solid var(--linea); background: #dfe4ea; z-index: 0; }
+@media (min-width: 900px) {
+  .risultati { grid-template-columns: minmax(360px, 5fr) 7fr; align-items: start; }
+  #mappa { order: 2; position: sticky; top: 16px; height: calc(100vh - 32px); min-height: 480px; }
+}
+.stato { margin: 0; color: var(--testo-2); }
+#riassunto { background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 14px 16px; margin-bottom: 12px; }
+#riassunto b { font-weight: 700; }
+#riassunto .risparmio { color: var(--verde); font-weight: 700; }
+#lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+
+.impianto { display: grid; grid-template-columns: auto 1fr; gap: 14px; align-items: center; background: var(--carta); border: 1px solid var(--linea); border-radius: var(--raggio); padding: 10px 14px 10px 10px; cursor: pointer; }
+.impianto:hover, .impianto.scelto { border-color: var(--asfalto); }
+.impianto.primo { border-color: var(--verde); box-shadow: 0 0 0 2px rgb(11 138 75 / 0.18); }
+.totem { background: var(--asfalto); border-radius: 10px; padding: 9px 10px 8px; display: grid; justify-items: center; gap: 4px; min-width: 104px; }
+.totem small { color: #aab4bf; font-size: 0.68rem; letter-spacing: 0.04em; font-weight: 600; }
+.cifre { display: flex; align-items: flex-start; gap: 3px; color: var(--led); }
+.cifre svg { height: 30px; width: auto; display: block; }
+.cifre .virgola { width: 5px; height: 5px; border-radius: 50%; background: currentColor; align-self: flex-end; margin: 0 1px 1px; box-shadow: 0 0 6px currentColor; }
+.cifre .millesimo svg { height: 17px; }
+.cifre .acceso { fill: currentColor; filter: drop-shadow(0 0 2px rgb(255 210 31 / 0.7)); }
+.cifre .spento { fill: var(--led-spento); }
+.primo .cifre { color: #7dffb0; }
+.primo .cifre .acceso { filter: drop-shadow(0 0 2px rgb(125 255 176 / 0.7)); }
+.dati h3 { margin: 0; font-size: 1rem; line-height: 1.25; }
+.dati p { margin: 2px 0 0; color: var(--testo-2); font-size: 0.875rem; line-height: 1.35; }
+.dati .azioni { margin-top: 6px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; font-size: 0.875rem; }
+.dati .azioni a { font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--led); }
+.dati .km { font-weight: 700; color: var(--testo); }
+.etichetta { display: inline-block; font-size: 0.72rem; font-weight: 700; padding: 1px 7px; border-radius: 999px; background: #e3f4ea; color: var(--verde); margin-left: 6px; vertical-align: 2px; }
+
+.segno { display: grid; place-items: center; border-radius: 8px; background: var(--asfalto); color: var(--led); font-weight: 800; font-size: 12px; padding: 3px 6px; border: 2px solid #fff; box-shadow: 0 2px 6px rgb(20 23 27 / 0.35); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.segno.meno { background: var(--verde); color: #fff; }
+.segno.piu { background: #6b7480; color: #fff; }
+.tu { width: 16px; height: 16px; border-radius: 50%; background: #1a73e8; border: 3px solid #fff; box-shadow: 0 0 0 6px rgb(26 115 232 / 0.2); }
+.leaflet-container { font: inherit; }
+
+.piede { background: var(--asfalto); color: #c5ccd4; padding: 22px max(16px, calc((100% - 1100px) / 2)) calc(22px + env(safe-area-inset-bottom)); font-size: 0.875rem; }
+.piede p { margin: 0 0 10px; max-width: 70ch; }
+.piede b { color: #fff; }
+@media (prefers-reduced-motion: no-preference) { .impianto { transition: border-color 160ms ease; } }

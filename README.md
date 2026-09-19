@@ -1,0 +1,73 @@
+# Benza
+
+**Il pieno dove costa meno. The cheapest fuel near you, from Italy's official price data. No ads, no sign-up, no app.**
+
+*"Benza" is what Italians call petrol when nobody is listening.*
+*[Italiano più sotto](#italiano)*
+
+![Benza](docs/schermata.jpg)
+
+Fuel in Italy went past €2 a litre, and I wanted to compare prices without ads, accounts or tracking. The prices themselves are public: every station has to report them to the Ministry, which publishes the whole list every morning. So this is just that list, made usable.
+
+Open the page, tap **Vicino a me** (or type a town), pick the fuel. You get the stations within your radius sorted from cheapest, on a map, with the date each price was reported and a link to navigate there.
+
+**Live:** https://lawrence-coder-wq.github.io/benza/
+
+## How it works
+
+- `strumenti/aggiorna.py` downloads the two open-data files from the Ministry (prices at 8 am + station registry), keeps regular petrol, diesel, LPG and methane, drops prices older than 10 days and stations whose coordinates are obviously wrong (about forty of them sit 100 km outside their own province), and writes one small JSON per province into `dati/`. Standard library only.
+- A GitHub Action runs it every morning and commits the new data. There is no server and no database.
+- The page is static. It loads only the provinces around you (60–100 KB each), does the distance maths in your browser, and draws the prices the way the roadside totems do: seven-segment digits with the small thousandth on top. No fonts, no frameworks; the only dependency is Leaflet for the map.
+
+## Privacy
+
+Your position is used for the calculation on your device and never sent anywhere. No cookies, no analytics. The only things stored are your last fuel, service and radius, in `localStorage`. Map tiles come from OpenStreetMap, which sees the map area you look at, like any map.
+
+## Run it yourself
+
+```bash
+python strumenti/aggiorna.py
+python -m http.server 8000
+```
+
+Then open http://localhost:8000. To publish your own copy: fork, enable GitHub Pages on the `main` branch, and allow Actions to write to the repository.
+
+## Limits, honestly
+
+Prices are self-reported by station operators and can be wrong or late; the date is shown next to each one. Always check the sign before filling up. Premium fuels are left out on purpose, so the comparison is like for like. Motorway stations are included.
+
+## Data and licence
+
+Price and station data: [Ministero delle Imprese e del Made in Italy](https://www.mimit.gov.it/it/open-data/elenco-dataset/carburanti-prezzi-praticati-e-anagrafica-degli-impianti), licence IODL 2.0. Map: © OpenStreetMap contributors.
+Code: MIT © 2026 Lorenzo Paoletta.
+
+---
+
+## Italiano
+
+**Il distributore meno caro vicino a te, dai dati ufficiali. Senza pubblicità, senza registrazione, senza app.**
+
+Con la benzina sopra i 2 euro volevo confrontare i prezzi senza pubblicità, senza account e senza essere tracciato. I prezzi, del resto, sono pubblici: ogni gestore deve comunicarli al Ministero, che ogni mattina pubblica l'elenco completo. Questo progetto è quell'elenco, reso usabile.
+
+Apri la pagina, tocca **Vicino a me** (o scrivi un comune), scegli il carburante. Vedi i distributori entro il raggio che vuoi, dal meno caro, sulla mappa, con la data in cui il prezzo è stato comunicato e il collegamento per farti portare lì.
+
+**Online:** https://lawrence-coder-wq.github.io/benza/
+
+### Come funziona
+
+- `strumenti/aggiorna.py` scarica i due file aperti del Ministero (prezzi delle 8 e anagrafica degli impianti), tiene benzina, gasolio, GPL e metano normali, scarta i prezzi più vecchi di 10 giorni e gli impianti con coordinate palesemente sbagliate (una quarantina risultano a 100 km dalla propria provincia), e scrive in `dati/` un file piccolo per provincia. Solo libreria standard di Python.
+- Un'azione di GitHub lo esegue ogni mattina e salva i dati nuovi. Non c'è nessun server e nessun database.
+- La pagina è statica. Carica solo le province intorno a te (60–100 KB l'una), calcola le distanze nel tuo browser e disegna i prezzi come i totem lungo la strada: cifre a sette segmenti col millesimo piccolo in alto. Niente caratteri da scaricare, niente framework: l'unica dipendenza è Leaflet per la mappa.
+
+### Riservatezza
+
+La posizione serve al calcolo sul tuo dispositivo e non viene inviata a nessuno. Niente cookie, niente statistiche. Si ricordano solo l'ultimo carburante, il servizio e il raggio, nel tuo browser. Le mattonelle della mappa arrivano da OpenStreetMap, che vede la zona di mappa che guardi, come per qualsiasi mappa.
+
+### Limiti, detti chiaramente
+
+I prezzi li comunicano i gestori e possono essere sbagliati o in ritardo: accanto a ognuno c'è la data. Controlla sempre il cartello prima di fare rifornimento. I carburanti speciali sono esclusi apposta, così il confronto è alla pari. Gli impianti autostradali sono compresi.
+
+### Dati e licenza
+
+Prezzi e impianti: Ministero delle Imprese e del Made in Italy, licenza IODL 2.0. Mappa: © OpenStreetMap e chi vi contribuisce.
+Codice: MIT © 2026 Lorenzo Paoletta.

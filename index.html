@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Benza · il pieno dove costa meno</title>
+<meta name="description" content="I distributori più economici vicino a te, con i prezzi ufficiali comunicati al Ministero. Senza pubblicità, senza registrazione, senza app: la tua posizione resta sul tuo telefono.">
+<meta name="theme-color" content="#14171b">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2314171b'/><path d='M18 50V18a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v32M14 50h30M22 22h14v10H22zM40 28l6 5v12a3 3 0 0 0 6 0V26l-6-7' fill='none' stroke='%23ffd21f' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="stile.css">
+</head>
+<body>
+<header class="testa">
+  <h1>Benza</h1>
+  <p class="motto">Il pieno dove costa meno.</p>
+  <p id="aggiornato">Prezzi ufficiali comunicati al Ministero</p>
+</header>
+
+<main>
+  <section class="comandi" aria-label="Cosa cerchi">
+    <div class="scelta" role="radiogroup" aria-label="Carburante" id="carburante">
+      <button role="radio" aria-checked="true" data-c="benzina">Benzina</button>
+      <button role="radio" aria-checked="false" data-c="gasolio">Gasolio</button>
+      <button role="radio" aria-checked="false" data-c="gpl">GPL</button>
+      <button role="radio" aria-checked="false" data-c="metano">Metano</button>
+    </div>
+    <div class="riga">
+      <div class="scelta piccola" role="radiogroup" aria-label="Servizio" id="modo">
+        <button role="radio" aria-checked="true" data-m="s">Self</button>
+        <button role="radio" aria-checked="false" data-m="a">Servito</button>
+      </div>
+      <label class="raggio"><span>Entro <output id="kmTesto">10</output> km</span>
+        <input type="range" id="km" min="2" max="40" step="1" value="10">
+      </label>
+    </div>
+    <div class="riga dove">
+      <button class="posizione" id="qui">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="3.2"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+        Vicino a me
+      </button>
+      <div class="cerca">
+        <input id="comune" type="search" placeholder="oppure scrivi un comune" autocomplete="off" aria-label="Comune" aria-controls="esiti">
+        <ul id="esiti" role="listbox" hidden></ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="risultati">
+    <div id="mappa" aria-label="Mappa dei distributori"></div>
+    <div class="elenco">
+      <p class="stato" id="stato">Tocca «Vicino a me» o scrivi un comune: ti mostro i distributori dal meno caro.</p>
+      <div id="riassunto" hidden></div>
+      <ol id="lista"></ol>
+    </div>
+  </section>
+</main>
+
+<footer class="piede">
+  <p><b>Niente pubblicità, niente registrazione, niente app.</b> La tua posizione serve solo a fare i conti qui, sul tuo dispositivo: non viene inviata a nessuno. La mappa arriva da OpenStreetMap.</p>
+  <p>Prezzi e impianti: dati aperti del <a href="https://www.mimit.gov.it/it/open-data/elenco-dataset/carburanti-prezzi-praticati-e-anagrafica-degli-impianti" target="_blank" rel="noopener">Ministero delle Imprese e del Made in Italy</a> (licenza IODL 2.0), aggiornati ogni mattina. I prezzi li comunicano i gestori: controlla sempre il cartello prima di fare rifornimento.</p>
+  <p>Un progetto libero di Lorenzo Paoletta · <a href="https://github.com/Lawrence-coder-wq/benza" target="_blank" rel="noopener">codice su GitHub</a></p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
