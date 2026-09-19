@@ -9,6 +9,8 @@
   const stato = { carburante: "benzina", modo: "s", km: 10, dove: null, nome: "" };
   let indice = null, comuni = null;
   const province = new Map();               // sigla -> impianti gia' scaricati
+  const abitudini = new Map();              // sigla -> comportamento abituale dei distributori (dallo storico)
+  let medieProvince = null;                 // medie del self di oggi, provincia per provincia
   try { Object.assign(stato, JSON.parse(localStorage.getItem("dcm") || "{}")); } catch {}
   const ricorda = () => { try { localStorage.setItem("dcm", JSON.stringify({ carburante: stato.carburante, modo: stato.modo, km: stato.km })); } catch {} };
 
@@ -35,13 +37,39 @@
   async function impiantiVicini() {
     const servono = indice.province.filter(([, lat, lon, raggio]) => distanza(stato.dove.lat, stato.dove.lon, lat, lon) <= raggio + stato.km + 5).map(p => p[0]);
     await Promise.all(servono.filter(s => !province.has(s)).map(async s => province.set(s, (await (await fetch(`dati/province/${s}.json`)).json()).impianti)));
+    // il comportamento abituale dei distributori (dallo storico) e le medie provinciali di oggi: se mancano, si fa senza
+    await Promise.all(servono.filter(s => !abitudini.has(s)).map(async s => abitudini.set(s, await fetch(`dati/storico/${s}.json`).then(r => (r.ok ? r.json() : null)).then(d => (d ? d.impianti : {})).catch(() => ({})))));
+    if (!medieProvince) medieProvince = await fetch("dati/indice-benza.json").then(r => r.json()).then(d => d.province).catch(() => ({}));
     const fuori = [];
     for (const s of servono) for (const i of province.get(s)) {
       const p = i[7][stato.carburante]; if (!p || !p[stato.modo]) continue;
       const km = distanza(stato.dove.lat, stato.dove.lon, i[1], i[2]); if (km > stato.km) continue;
-      fuori.push({ id: i[0], lat: i[1], lon: i[2], bandiera: i[3], nome: i[4], indirizzo: i[5], comune: i[6], prezzo: p[stato.modo][0], del: p[stato.modo][1], km });
+      fuori.push({ id: i[0], prov: s, lat: i[1], lon: i[2], bandiera: i[3], nome: i[4], indirizzo: i[5], comune: i[6], prezzo: p[stato.modo][0], del: p[stato.modo][1], km });
     }
     return fuori.sort((a, b) => a.prezzo - b.prezzo || a.km - b.km);
+  }
+
+  // Il giudizio: com'e' il prezzo di oggi rispetto al SOLITO di quel distributore, e quanto fidarsi di cio' che comunica.
+  // Vale per benzina e gasolio in self, che e' cio' che lo storico misura.
+  function giudizio(x) {
+    if (stato.modo !== "s") return "";
+    const a = (abitudini.get(x.prov) || {})[x.id], sigla = { benzina: "b", gasolio: "g" }[stato.carburante];
+    const v = a && a[sigla], mediaOggi = (medieProvince[x.prov] || {})[stato.carburante];
+    if (!v) return "";
+    const [solito, fineSettimana, ogni, fermo, anomali] = v, pezzi = [];
+    const cent = n => Math.abs(n).toFixed(1).replace(".", ",").replace(",0", "");
+    if (Math.abs(solito) >= 1) pezzi.push(`Di solito ${cent(solito)} cent ${solito < 0 ? "sotto" : "sopra"} la media della provincia`);
+    if (mediaOggi) {
+      const oggi = (x.prezzo - mediaOggi) * 100 - solito;
+      if (oggi <= -1.5) pezzi.push(`<b class="bene">oggi più conveniente del suo solito</b>`);
+      else if (oggi >= 1.5) pezzi.push(`<b class="male">oggi più caro del suo solito</b>`);
+    }
+    if (fineSettimana >= 1.5) pezzi.push(`nel fine settimana tende a rincarare (+${cent(fineSettimana)} cent)`);
+    let fiducia = "";
+    if (anomali > 5) fiducia = `<span class="fiducia poca">ha comunicato spesso prezzi sbagliati</span>`;
+    else if (fermo > 30 || ogni > 7) fiducia = `<span class="fiducia poca">aggiorna di rado: controlla il cartello</span>`;
+    else if (ogni <= 2.5 && fermo <= 5 && anomali <= 1) fiducia = `<span class="fiducia tanta">aggiorna con regolarità</span>`;
+    return pezzi.length || fiducia ? `<p class="giudizio">${pezzi.join(" · ")}${pezzi.length && fiducia ? " · " : ""}${fiducia}</p>` : "";
   }
 
   async function cerca() {
@@ -83,6 +111,7 @@
       <div class="totem">${totem(x.prezzo)}<small>${modo.toUpperCase()} · ${esc(x.del)}</small></div>
       <div class="dati"><h3>${esc(x.bandiera && x.bandiera !== "Pompe Bianche" ? x.bandiera : x.nome || "Pompa bianca")}${k === 0 ? '<span class="etichetta">il meno caro</span>' : ""}</h3>
         <p>${esc(x.indirizzo)}${x.comune ? ", " + esc(x.comune) : ""}</p>
+        ${giudizio(x)}
         <div class="azioni"><span class="km">${x.km < 1 ? Math.round(x.km * 1000) + " m" : x.km.toFixed(1).replace(".", ",") + " km"}</span>
           <a href="https://www.google.com/maps/dir/?api=1&destination=${x.lat},${x.lon}" target="_blank" rel="noopener">Portami lì</a></div></div></li>`).join("");
 

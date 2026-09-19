@@ -23,6 +23,14 @@ Benza installs like an app, without any store. **Android:** open the link in Chr
 - A GitHub Action runs it every morning and commits the new data. There is no server and no database.
 - The page is static. It loads only the provinces around you (60–100 KB each), does the distance maths in your browser, and draws the prices the way the roadside totems do: seven-segment digits with the small thousandth on top. No fonts, no frameworks; the only dependency is Leaflet for the map.
 
+## What the others don't tell you
+
+- **Is this price good *for this station*?** From the Ministry's historical archive (a file per day since 2015) Benza learns how each station usually sits against its province's average, on the same day. So it can say "usually 5 cents below the local average, today even better", whatever the market is doing.
+- **Can you trust it?** How often the station updates its price, how often the price it reported was stale or plainly wrong. The cheapest price on the list is worth little if it is ten days old: Benza says so.
+- **The Benza index.** Every morning, the average self-service price in each province against the national average, with a ready-to-quote sentence (`indice.html`). The index history grows by one day at each update.
+
+The history is recomputed once a month by a GitHub Action (`strumenti/storico.py`), on GitHub's servers.
+
 ## Privacy
 
 Your position is used for the calculation on your device and never sent anywhere. No cookies, no analytics. The only things stored are your last fuel, service and radius, in `localStorage`. Map tiles come from OpenStreetMap, which sees the map area you look at, like any map.
@@ -66,6 +74,14 @@ Benza si installa come un'app, senza passare da nessuno store. **Android:** apri
 - `strumenti/aggiorna.py` scarica i due file aperti del Ministero (prezzi delle 8 e anagrafica degli impianti), tiene benzina, gasolio, GPL e metano normali, scarta i prezzi più vecchi di 10 giorni e gli impianti con coordinate palesemente sbagliate (una quarantina risultano a 100 km dalla propria provincia), e scrive in `dati/` un file piccolo per provincia. Solo libreria standard di Python.
 - Un'azione di GitHub lo esegue ogni mattina e salva i dati nuovi. Non c'è nessun server e nessun database.
 - La pagina è statica. Carica solo le province intorno a te (60–100 KB l'una), calcola le distanze nel tuo browser e disegna i prezzi come i totem lungo la strada: cifre a sette segmenti col millesimo piccolo in alto. Niente caratteri da scaricare, niente framework: l'unica dipendenza è Leaflet per la mappa.
+
+### Quello che gli altri non dicono
+
+- **Questo prezzo è buono *per questo distributore*?** Dall'archivio storico del Ministero (un file al giorno dal 2015) Benza impara come si comporta di solito ogni impianto rispetto alla media della sua provincia, nello stesso giorno. Così può dire «di solito 5 centesimi sotto la media, oggi anche meglio», qualunque cosa faccia il mercato.
+- **Ci si può fidare?** Ogni quanto il distributore aggiorna il prezzo, quante volte ne ha comunicato uno vecchio o palesemente sbagliato. Il prezzo più basso della lista vale poco se è fermo da dieci giorni: Benza lo dice.
+- **L'indice Benza.** Ogni mattina il prezzo medio del self in ogni provincia contro la media italiana, con la frase pronta da citare (`indice.html`). Lo storico dell'indice cresce di un giorno a ogni aggiornamento.
+
+Lo storico si ricalcola una volta al mese con un'azione di GitHub (`strumenti/storico.py`), sui server di GitHub.
 
 ### Riservatezza
 

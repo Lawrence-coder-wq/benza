@@ -138,3 +138,13 @@ main { padding: 0 max(16px, calc((100% - 1100px) / 2)); }
 .grafico { width: 100%; height: auto; max-height: 180px; margin-top: 16px; }
 .nota { color: var(--testo-2); font-size: 0.875rem; margin: 10px 0 0; }
 .metodo p { margin: 0; color: var(--testo-2); max-width: 75ch; font-size: 0.95rem; }
+
+/* il giudizio sul distributore: una riga sola, senza gridare */
+.dati .giudizio { margin-top: 5px; font-size: 0.82rem; line-height: 1.4; color: var(--testo-2); }
+.giudizio .bene { color: var(--verde); font-weight: 700; }
+.giudizio .male { color: var(--rosso); font-weight: 700; }
+.fiducia { white-space: nowrap; }
+.fiducia::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: 1px; }
+.fiducia.tanta::before { background: var(--verde); }
+.fiducia.poca { color: var(--ambra); font-weight: 600; }
+.fiducia.poca::before { background: var(--ambra); }

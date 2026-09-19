@@ -1,0 +1,60 @@
+name: Storico dei distributori
+
+# Una volta al mese scarica gli ultimi quattro trimestri pubblicati dal Ministero (circa 50 MB l'uno) e ricalcola
+# il comportamento abituale di ogni distributore. Gira qui, sui server di GitHub: nessun computer di casa resta acceso.
+on:
+  schedule:
+    - cron: "15 5 3 * *"
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - "strumenti/storico.py"
+      - ".github/workflows/storico.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: storico
+  cancel-in-progress: false
+
+jobs:
+  storico:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Scarica gli ultimi quattro trimestri disponibili
+        run: |
+          mkdir archivi
+          anno=$(date +%Y)
+          trovati=0
+          for a in $anno $((anno - 1)) $((anno - 2)); do
+            for t in 4 3 2 1; do
+              [ "$trovati" -ge 4 ] && break 2
+              url="https://opendatacarburanti.mise.gov.it/categorized/prezzo_alle_8/${a}/${a}_${t}_tr.tar.gz"
+              if curl -sfL -m 600 -A "benza (github.com/Lawrence-coder-wq/benza)" -o "archivi/${a}_${t}.tar.gz" "$url"; then
+                echo "preso ${a} trimestre ${t}"; trovati=$((trovati + 1))
+              else
+                rm -f "archivi/${a}_${t}.tar.gz"
+              fi
+            done
+          done
+          [ "$trovati" -ge 1 ] || { echo "nessun archivio disponibile"; exit 1; }
+      - name: Calcola
+        run: python strumenti/storico.py archivi/*.tar.gz
+      - name: Salva
+        run: |
+          git config user.name "Lorenzo Paoletta"
+          git config user.email "210894112+Lawrence-coder-wq@users.noreply.github.com"
+          git add dati/storico
+          git diff --cached --quiet && exit 0
+          git commit -m "Storico dei distributori aggiornato"
+          git pull --rebase origin main
+          git push origin main
