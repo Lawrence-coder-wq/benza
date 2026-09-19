@@ -149,6 +149,21 @@
   $("#esiti").addEventListener("click", e => { const li = e.target.closest("li[data-k]"); if (li) prendi($("#esiti")._esiti[+li.dataset.k]); });
   document.addEventListener("click", e => { if (!e.target.closest(".cerca")) $("#esiti").hidden = true; });
 
+  // ---------------------------------------------------------------- l'app sul telefono
+  if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+  const gia = matchMedia("(display-mode: standalone)").matches || navigator.standalone;
+  let rifiutato = false; try { rifiutato = localStorage.getItem("dcm-installa") === "no"; } catch {}
+  let invito = null;
+  const mostraInvito = () => { if (!gia && !rifiutato) $("#installa").hidden = false; };
+  addEventListener("beforeinstallprompt", e => { e.preventDefault(); invito = e; mostraInvito(); });            // Android e computer
+  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !gia) {                                                  // iPhone: l'installazione si fa a mano
+    $("#installaTesto").innerHTML = "<b>Metti Benza sull'iPhone.</b> Tocca Condividi, poi «Aggiungi alla schermata Home».";
+    $("#installaSi").hidden = true; mostraInvito();
+  }
+  $("#installaSi").addEventListener("click", async () => { if (!invito) return; invito.prompt(); await invito.userChoice; invito = null; $("#installa").hidden = true; });
+  $("#installaNo").addEventListener("click", () => { $("#installa").hidden = true; try { localStorage.setItem("dcm-installa", "no"); } catch {} });
+  addEventListener("appinstalled", () => { $("#installa").hidden = true; });
+
   // ---------------------------------------------------------------- avvio
   fetch("dati/indice.json").then(r => r.json()).then(d => {
     indice = d;

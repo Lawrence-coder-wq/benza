@@ -13,6 +13,10 @@ Open the page, tap **Vicino a me** (or type a town), pick the fuel. You get the 
 
 **Live:** https://lawrence-coder-wq.github.io/benza/
 
+## On your phone
+
+Benza installs like an app, without any store. **Android:** open the link in Chrome and tap *Installa* (or ⋮ → *Aggiungi a schermata Home*). **iPhone:** open it in Safari, tap *Condividi* → *Aggiungi alla schermata Home*. It opens full screen, starts instantly, and with no signal it shows the last prices it downloaded, with their date.
+
 ## How it works
 
 - `strumenti/aggiorna.py` downloads the two open-data files from the Ministry (prices at 8 am + station registry), keeps regular petrol, diesel, LPG and methane, drops prices older than 10 days and stations whose coordinates are obviously wrong (about forty of them sit 100 km outside their own province), and writes one small JSON per province into `dati/`. Standard library only.
@@ -52,6 +56,10 @@ Con la benzina sopra i 2 euro volevo confrontare i prezzi senza pubblicità, sen
 Apri la pagina, tocca **Vicino a me** (o scrivi un comune), scegli il carburante. Vedi i distributori entro il raggio che vuoi, dal meno caro, sulla mappa, con la data in cui il prezzo è stato comunicato e il collegamento per farti portare lì.
 
 **Online:** https://lawrence-coder-wq.github.io/benza/
+
+### Sul telefono
+
+Benza si installa come un'app, senza passare da nessuno store. **Android:** apri il link con Chrome e tocca *Installa* (oppure ⋮ → *Aggiungi a schermata Home*). **iPhone:** aprilo con Safari, tocca *Condividi* → *Aggiungi alla schermata Home*. Si apre a tutto schermo, parte subito e, se non c'è campo, mostra gli ultimi prezzi scaricati con la loro data.
 
 ### Come funziona
 

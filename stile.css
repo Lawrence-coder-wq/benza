@@ -93,3 +93,13 @@ main { padding: 0 max(16px, calc((100% - 1100px) / 2)); }
 .piede p { margin: 0 0 10px; max-width: 70ch; }
 .piede b { color: #fff; }
 @media (prefers-reduced-motion: no-preference) { .impianto { transition: border-color 160ms ease; } }
+
+/* invito a mettere l'app sul telefono: compare solo dove si puo' fare, e una volta chiuso non torna */
+.installa { display: flex; align-items: center; gap: 12px; background: var(--asfalto); color: #fff; border-radius: var(--raggio); padding: 10px 12px; margin-bottom: 16px; }
+.installa[hidden] { display: none; }
+.installa img { border-radius: 9px; flex: none; }
+.installa p { margin: 0; flex: 1; font-size: 0.9rem; line-height: 1.35; color: #c5ccd4; }
+.installa b { color: #fff; }
+.installa button { border: 0; border-radius: 10px; min-height: 40px; padding: 0 14px; font-weight: 700; background: var(--led); color: var(--asfalto); }
+.installa #installaNo { background: transparent; color: #aab4bf; padding: 0 8px; }
+@media (display-mode: standalone) { .installa { display: none; } .testa { padding-top: calc(18px + env(safe-area-inset-top)); } }

@@ -7,6 +7,12 @@
 <meta name="description" content="I distributori più economici vicino a te, con i prezzi ufficiali comunicati al Ministero. Senza pubblicità, senza registrazione, senza app: la tua posizione resta sul tuo telefono.">
 <meta name="theme-color" content="#14171b">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%2314171b'/><path d='M18 50V18a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v32M14 50h30M22 22h14v10H22zM40 28l6 5v12a3 3 0 0 0 6 0V26l-6-7' fill='none' stroke='%23ffd21f' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/></svg>">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icone/icona-apple-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Benza">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="stylesheet" href="stile.css">
 </head>
@@ -45,6 +51,13 @@
       </div>
     </div>
   </section>
+
+  <aside class="installa" id="installa" hidden>
+    <img src="icone/icona-192.png" alt="" width="40" height="40">
+    <p id="installaTesto"><b>Metti Benza sul telefono.</b> Si apre come un'app, senza passare da uno store.</p>
+    <button id="installaSi">Installa</button>
+    <button id="installaNo" aria-label="Non ora">✕</button>
+  </aside>
 
   <section class="risultati">
     <div id="mappa" aria-label="Mappa dei distributori"></div>

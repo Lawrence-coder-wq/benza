@@ -1,0 +1,24 @@
+name: Rilascio
+
+# Quando si pubblica un'etichetta di versione (v1.0.0) nasce da sola la release, con dentro lo zip del sito pronto da ospitare.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  rilascio:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepara lo zip
+        run: |
+          zip -r "benza-${GITHUB_REF_NAME}.zip" index.html app.js stile.css sw.js manifest.webmanifest icone dati strumenti LICENSE README.md
+      - name: Crea la release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" "benza-${GITHUB_REF_NAME}.zip" --title "Benza ${GITHUB_REF_NAME#v}" --notes-file "docs/rilasci/${GITHUB_REF_NAME}.md"
