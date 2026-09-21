@@ -148,3 +148,25 @@ main { padding: 0 max(16px, calc((100% - 1100px) / 2)); }
 .fiducia.tanta::before { background: var(--verde); }
 .fiducia.poca { color: var(--ambra); font-weight: 600; }
 .fiducia.poca::before { background: var(--ambra); }
+
+/* ---- pagina del percorso: conviene la deviazione? ---- */
+.vai-indice + .vai-indice { margin-left: 16px; }
+.viaggio { display: grid; gap: 12px; grid-template-columns: 1fr auto 1fr; align-items: end; margin-bottom: 14px; }
+.viaggio label, .numero { display: grid; gap: 4px; font-size: 0.9rem; color: var(--testo-2); }
+.posizione.piccola { min-height: 48px; padding: 0 14px; font-size: 0.9rem; background: var(--asfalto-2); }
+.esiti { position: absolute; z-index: 1200; left: 0; right: 0; top: 76px; margin: 0; padding: 4px; list-style: none; background: var(--carta); border: 1px solid var(--linea); border-radius: 12px; box-shadow: 0 12px 30px rgb(20 23 27 / 0.18); max-height: 280px; overflow: auto; }
+.esiti li { padding: 10px 12px; border-radius: 8px; cursor: pointer; display: flex; justify-content: space-between; gap: 12px; }
+.esiti li:hover, .esiti li[aria-selected="true"] { background: var(--fondo); }
+.esiti small { color: var(--testo-2); }
+.numeri { margin: 14px 0; gap: 18px; }
+.numero > span { display: flex; align-items: center; gap: 8px; color: var(--testo); }
+.numero input { width: 5.2rem; min-height: 44px; border: 1px solid var(--linea); border-radius: 12px; padding: 0 10px; background: var(--carta); font-weight: 700; font-variant-numeric: tabular-nums; }
+.prezzone { color: var(--led); font-weight: 800; font-size: 1.35rem; letter-spacing: 0.02em; font-variant-numeric: tabular-nums; text-shadow: 0 0 6px rgb(255 210 31 / 0.45); }
+.primo .prezzone { color: #7dffb0; text-shadow: 0 0 6px rgb(125 255 176 / 0.45); }
+.esito { margin: 12px 0 0; padding: 14px 16px; border-radius: var(--raggio); background: var(--carta); border: 1px solid var(--linea); font-size: 1.02rem; line-height: 1.5; }
+.esito.si { border-color: var(--verde); box-shadow: 0 0 0 2px rgb(11 138 75 / 0.12); }
+.esito .risparmio { color: var(--verde); font-weight: 800; white-space: nowrap; }
+#verdetto .nota { margin: 8px 2px 12px; }
+@media (max-width: 700px) { .viaggio { grid-template-columns: 1fr; } .esiti { top: 76px; } }
+#verdetto { display: grid; gap: 10px; margin-bottom: 10px; }
+#verdetto .esito { margin: 0; }

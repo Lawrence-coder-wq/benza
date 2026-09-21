@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Conviene la deviazione? · Benza lungo la strada</title>
+<meta name="description" content="Devi fare un viaggio: Benza guarda i distributori lungo la strada e ti dice se vale la pena uscire per quello meno caro, contando i chilometri e i minuti in più.">
+<meta name="theme-color" content="#14171b">
+<link rel="icon" href="icone/icona-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+<link rel="stylesheet" href="stile.css">
+</head>
+<body>
+<header class="testa">
+  <h1><a href="./">Benza</a></h1>
+  <p class="motto">Lungo la strada: conviene la deviazione?</p>
+  <p id="aggiornato">Prezzi ufficiali comunicati al Ministero</p>
+</header>
+
+<main class="pagina-indice">
+  <p class="torna"><a href="./">← Cerca il distributore meno caro vicino a te</a></p>
+
+  <section class="blocco" aria-labelledby="t-viaggio">
+    <h2 id="t-viaggio">Che strada fai?</h2>
+    <div class="viaggio">
+      <div class="cerca">
+        <label for="da">Parto da</label>
+        <input id="da" type="search" placeholder="comune di partenza" autocomplete="off" aria-controls="esitiDa">
+        <ul class="esiti" id="esitiDa" role="listbox" hidden></ul>
+      </div>
+      <button class="posizione piccola" id="qui" type="button">Dalla mia posizione</button>
+      <div class="cerca">
+        <label for="a">Arrivo a</label>
+        <input id="a" type="search" placeholder="comune di arrivo" autocomplete="off" aria-controls="esitiA">
+        <ul class="esiti" id="esitiA" role="listbox" hidden></ul>
+      </div>
+    </div>
+
+    <div class="scelta" role="radiogroup" aria-label="Carburante" id="carburante">
+      <button role="radio" aria-checked="true" data-c="benzina">Benzina</button>
+      <button role="radio" aria-checked="false" data-c="gasolio">Gasolio</button>
+      <button role="radio" aria-checked="false" data-c="gpl">GPL</button>
+      <button role="radio" aria-checked="false" data-c="metano">Metano</button>
+    </div>
+    <div class="riga numeri">
+      <div class="scelta piccola" role="radiogroup" aria-label="Servizio" id="modo">
+        <button role="radio" aria-checked="true" data-m="s">Self</button>
+        <button role="radio" aria-checked="false" data-m="a">Servito</button>
+      </div>
+      <label class="numero">Quanto metto <span><input id="litri" type="number" inputmode="decimal" min="5" max="120" step="1" value="40"> <span id="unita">litri</span></span></label>
+      <label class="numero">La mia auto fa <span><input id="resa" type="number" inputmode="decimal" min="4" max="40" step="0.5" value="15"> km con un <span id="unita1">litro</span></span></label>
+    </div>
+    <button class="copia" id="calcola" type="button">Guarda lungo la strada</button>
+    <p class="stato" id="stato"></p>
+  </section>
+
+  <section class="risultati" id="risultati" hidden>
+    <div id="mappa" aria-label="La strada e i distributori"></div>
+    <div class="elenco">
+      <div id="verdetto"></div>
+      <ol id="lista"></ol>
+      <p class="nota" id="notaConti"></p>
+    </div>
+  </section>
+
+  <section class="blocco metodo">
+    <h3>Come faccio i conti</h3>
+    <p>Prendo la strada più veloce tra i due punti e guardo i distributori fino a 5 km dal percorso. Il confronto è con il meno caro che trovi <b>senza uscire dalla strada</b>: per ogni alternativa calcolo i chilometri e i minuti in più per andarci e tornare sul percorso, tolgo il carburante che bruci per la deviazione e ti dico quanto resta in tasca. Se restano spiccioli, te lo dico. Le deviazioni oltre i venti minuti non le propongo nemmeno.</p>
+  </section>
+</main>
+
+<footer class="piede">
+  <p><b>Una cosa da sapere.</b> Per disegnare la strada questa pagina chiede il percorso a <a href="https://project-osrm.org/" target="_blank" rel="noopener">OSRM</a>, un servizio pubblico e gratuito basato su OpenStreetMap: gli arrivano il punto di partenza, quello di arrivo e le coordinate dei distributori da confrontare. Se usi «Dalla mia posizione» gli arriva anche quella: se preferisci di no, scrivi il comune. Benza non conserva niente.</p>
+  <p>Prezzi e impianti: dati aperti del <a href="https://www.mimit.gov.it/it/open-data/elenco-dataset/carburanti-prezzi-praticati-e-anagrafica-degli-impianti" target="_blank" rel="noopener">Ministero delle Imprese e del Made in Italy</a> (licenza IODL 2.0). I prezzi li comunicano i gestori: controlla sempre il cartello prima di fare rifornimento.</p>
+  <p>Un progetto libero di Lorenzo Paoletta · <a href="https://github.com/Lawrence-coder-wq/benza" target="_blank" rel="noopener">codice su GitHub</a></p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<script src="percorso.js"></script>
+</body>
+</html>

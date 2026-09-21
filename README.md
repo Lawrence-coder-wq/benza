@@ -27,13 +27,16 @@ Benza installs like an app, without any store. **Android:** open the link in Chr
 
 - **Is this price good *for this station*?** From the Ministry's historical archive (a file per day since 2015) Benza learns how each station usually sits against its province's average, on the same day. So it can say "usually 5 cents below the local average, today even better", whatever the market is doing.
 - **Can you trust it?** How often the station updates its price, how often the price it reported was stale or plainly wrong. The cheapest price on the list is worth little if it is ten days old: Benza says so.
+- **Is the detour worth it?** Tell it where you start and where you are going (`percorso.html`): it looks at the stations within 5 km of the road, compares them with the cheapest one you meet without leaving the route, measures the extra kilometres and minutes, subtracts the fuel the detour burns and tells you what is left in your pocket. Often the honest answer is "not worth it", and it says that too.
 - **The Benza index.** Every morning, the average self-service price in each province against the national average, with a ready-to-quote sentence (`indice.html`). The index history grows by one day at each update.
+
+![Is the detour worth it? Salerno to Rome](docs/percorso.jpg)
 
 The history is recomputed once a month by a GitHub Action (`strumenti/storico.py`), on GitHub's servers.
 
 ## Privacy
 
-Your position is used for the calculation on your device and never sent anywhere. No cookies, no analytics. The only things stored are your last fuel, service and radius, in `localStorage`. Map tiles come from OpenStreetMap, which sees the map area you look at, like any map.
+Your position is used for the calculation on your device and never sent anywhere. No cookies, no analytics. The only things stored are your last fuel, service and radius, in `localStorage`. Map tiles come from OpenStreetMap, which sees the map area you look at, like any map. One exception, stated on the page itself: the route page asks the public OSRM routing service for the road, so OSRM receives the start, the destination and the coordinates of the stations being compared (and your position only if you choose "from my position" instead of typing a town).
 
 ## Run it yourself
 
@@ -79,13 +82,14 @@ Benza si installa come un'app, senza passare da nessuno store. **Android:** apri
 
 - **Questo prezzo è buono *per questo distributore*?** Dall'archivio storico del Ministero (un file al giorno dal 2015) Benza impara come si comporta di solito ogni impianto rispetto alla media della sua provincia, nello stesso giorno. Così può dire «di solito 5 centesimi sotto la media, oggi anche meglio», qualunque cosa faccia il mercato.
 - **Ci si può fidare?** Ogni quanto il distributore aggiorna il prezzo, quante volte ne ha comunicato uno vecchio o palesemente sbagliato. Il prezzo più basso della lista vale poco se è fermo da dieci giorni: Benza lo dice.
+- **Conviene la deviazione?** Gli dici da dove parti e dove arrivi (`percorso.html`): guarda i distributori entro 5 km dalla strada, li confronta con il meno caro che incontri senza uscire dal percorso, misura i chilometri e i minuti in più, toglie il carburante che bruci per deviare e ti dice quanto resta in tasca. Spesso la risposta onesta è «non conviene», e lo dice.
 - **L'indice Benza.** Ogni mattina il prezzo medio del self in ogni provincia contro la media italiana, con la frase pronta da citare (`indice.html`). Lo storico dell'indice cresce di un giorno a ogni aggiornamento.
 
 Lo storico si ricalcola una volta al mese con un'azione di GitHub (`strumenti/storico.py`), sui server di GitHub.
 
 ### Riservatezza
 
-La posizione serve al calcolo sul tuo dispositivo e non viene inviata a nessuno. Niente cookie, niente statistiche. Si ricordano solo l'ultimo carburante, il servizio e il raggio, nel tuo browser. Le mattonelle della mappa arrivano da OpenStreetMap, che vede la zona di mappa che guardi, come per qualsiasi mappa.
+La posizione serve al calcolo sul tuo dispositivo e non viene inviata a nessuno. Niente cookie, niente statistiche. Si ricordano solo l'ultimo carburante, il servizio e il raggio, nel tuo browser. Le mattonelle della mappa arrivano da OpenStreetMap, che vede la zona di mappa che guardi, come per qualsiasi mappa. Un'eccezione, scritta anche sulla pagina: la pagina del percorso chiede la strada al servizio pubblico OSRM, che quindi riceve partenza, arrivo e le coordinate dei distributori da confrontare (la tua posizione solo se scegli «Dalla mia posizione» invece di scrivere il comune).
 
 ### Limiti, detti chiaramente
 
